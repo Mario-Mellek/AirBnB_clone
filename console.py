@@ -84,6 +84,42 @@ class HBNBCommand(cmd.Cmd):
                 instances.append(str(obj))
         print(instances)
 
+    def do_update(self, arg):
+        """
+            Updates an instance by adding or updating an attribute
+        """
+        args = shlex.split(arg)
+        if self.validate_args(args, 2):
+            key = f"{args[0]}.{args[1]}"
+            instance = storage.all().get(key)
+            if instance is None:
+                print("** no instance found **")
+                return
+            if len(args) < 3:
+                print("** attribute name missing **")
+                return
+            if len(args) < 4:
+                print("** value missing **")
+                return
+
+            attr_name = args[2]
+            attr_value = args[3]
+
+            if attr_name in ["id", "created_at", "updated_at"]:
+                return
+
+            try:
+                if hasattr(instance, attr_name):
+                    attr_type = type(getattr(instance, attr_name))
+                    attr_value = attr_type(attr_value)
+                else:
+                    attr_value = eval(attr_value)
+            except (ValueError, NameError):
+                pass
+
+            setattr(instance, attr_name, attr_value)
+            instance.save()
+
     def validate_args(self, args, expected_len):
         """Validates the arguments for the commands"""
         if not args:
