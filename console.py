@@ -59,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_destroy(self, arg):
-        """Deletes an instance based on the class name and id."""
+        """Deletes an instance by the class name and id."""
         args = shlex.split(arg)
         if self.validate_args(args, 2):
             key = f"{args[0]}.{args[1]}"
@@ -68,6 +68,21 @@ class HBNBCommand(cmd.Cmd):
                 storage.save()
             else:
                 print("** no instance found **")
+
+    def do_all(self, arg):
+        """
+            Prints all string representation of all instances
+        """
+        args = shlex.split(arg)
+        if args and args[0] not in self.classes:
+            print("** class doesn't exist **")
+            return
+
+        instances = []
+        for obj in storage.all().values():
+            if not args or args[0] == obj.__class__.__name__:
+                instances.append(str(obj))
+        print(instances)
 
     def validate_args(self, args, expected_len):
         """Validates the arguments for the commands"""
