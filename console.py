@@ -50,22 +50,37 @@ class HBNBCommand(cmd.Cmd):
 	    according to class name and id.
 	"""
         args = shlex.split(arg)
+        if self.validate_args(args, 2):
+            key = f"{args[0]}.{args[1]}"
+            instance = storage.all().get(key)
+            if instance:
+                print(instance)
+            else:
+                print("** no instance found **")
+
+    def do_destroy(self, arg):
+        """Deletes an instance based on the class name and id."""
+        args = shlex.split(arg)
+        if self.validate_args(args, 2):
+            key = f"{args[0]}.{args[1]}"
+            if key in storage.all():
+                del storage.all()[key]
+                storage.save()
+            else:
+                print("** no instance found **")
+
+    def validate_args(self, args, expected_len):
+        """Validates the arguments for the commands"""
         if not args:
             print("** class name missing **")
-            return
+            return False
         if args[0] not in self.classes:
             print("** class doesn't exist **")
-            return
-        if len(args) < 2:
+            return False
+        if len(args) < expected_len:
             print("** instance id missing **")
-            return
-
-        key = f"{args[0]}.{args[1]}"
-        instance = storage.all().get(key)
-        if instance is None:
-            print("** no instance found **")
-        else:
-            print(instance)
+            return False
+        return True
 
 
 if __name__ == '__main__':
