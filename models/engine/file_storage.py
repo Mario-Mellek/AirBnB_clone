@@ -10,6 +10,7 @@ instances.
 import json
 import os
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -20,6 +21,10 @@ class FileStorage:
 
     __file_path = "file.json"
     __objects = {}
+    classes = {
+        "BaseModel": BaseModel,
+        "User": User
+    }
 
     def all(self):
         """Returns the dictionary __objects."""
@@ -46,5 +51,5 @@ class FileStorage:
                 obj_dict = json.load(f)
                 for key, value in obj_dict.items():
                     cls_name = value["__class__"]
-                    if cls_name == "BaseModel":
-                        self.__objects[key] = BaseModel(**value)
+                    if cls_name in self.classes:
+                        self.__objects[key] = self.classes[cls_name](**value)
