@@ -47,8 +47,8 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         """
             Prints the string representation of an instance
-            according to class name and id.
-        """
+	    according to class name and id.
+	"""
         args = shlex.split(arg)
         if self.validate_args(args, 2):
             key = f"{args[0]}.{args[1]}"
