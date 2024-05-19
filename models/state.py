@@ -7,7 +7,7 @@ from models.base_model import BaseModel
 
 class State(BaseModel):
     """
-    User class: inherits from BaseModel.
+    State class: inherits from BaseModel.
     Public class attributes:
         name (str): State name.
     """
