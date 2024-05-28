@@ -18,6 +18,17 @@ section.places article {
   border: 1px solid #ff5a5f;
   border-radius: 4px;
   height: fit-content;
+  animation: fadeIn 0.5s forwards ease-in-out;
+}
+@keyframes fadeIn {
+  0% {
+    transform: translate(-400px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0px);
+    opacity: 1;
+  }
 }
 section.places article h2 {
   font-size: 30px;
